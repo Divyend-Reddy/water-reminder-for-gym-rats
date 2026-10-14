@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Character encoding so emojis and symbols display correctly -->
+    <meta charset="UTF-8">
+
+    <!-- Crucial mobile tag: prevents zooming out and makes it fit phone screens -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>AQUADIVI • Gym Water Tracker</title>
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+
+    <!-- Connects our upcoming CSS stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Main Phone Container -->
+    <div class="app-container">
+
+        <!-- Top Header -->
+        <header class="app-header">
+            <div class="brand">
+                <span class="brand-badge">⚡</span>
+                <div>
+                    <h1 class="brand-title">AQUADIVI</h1>
+                    <p class="brand-subtitle">Gym Hydration Tracker</p>
+                </div>
+            </div>
+        </header>
+                <!-- Main Screen -->
+        <main class="main-content">
+
+            <!-- Hero Water Gauge Card -->
+            <section class="gauge-card">
+
+                <!-- Circular Progress Ring -->
+                <div class="ring-wrapper">
+                    <svg class="ring-svg" viewBox="0 0 240 240">
+                        <circle class="ring-track" cx="120" cy="120" r="100"></circle>
+                        <circle class="ring-progress" id="progressRing" cx="120" cy="120" r="100"></circle>
+                    </svg>
+
+                    <!-- Inside Ring Content -->
+                    <div class="ring-content">
+                        <span class="pct-badge" id="pctBadge">0%</span>
+                        <div class="amount-group">
+                            <span class="main-val" id="currentAmount">0</span>
+                            <span class="unit-val">ml</span>
+                        </div>
+                        <div class="liters-val" id="currentLiters">0.00 L</div>
+                        <p class="target-text">Goal: <strong id="goalDisplay">4,000</strong> ml (<span id="goalLitersDisplay">4.0 L</span>)</p>
+                    </div>
+                </div>
+
+                <!-- Remaining Status Pill -->
+                <div class="status-pill" id="statusPill">
+                    <span id="remainingText">4,000 ml remaining today</span>
+                </div>
+
+                <!-- Gym Target Quick Switcher -->
+                <div class="target-presets">
+                    <span class="preset-title">TARGET:</span>
+                    <button class="target-pill" data-target="3500">3.5L</button>
+                    <button class="target-pill active" data-target="4000">4.0L</button>
+                    <button class="target-pill" data-target="4500">4.5L</button>
+                    <button class="target-pill" data-target="5000">5.0L</button>
+                </div>
+
+            </section>
+
+            <!-- 1-Tap Quick Gym Drink Buttons -->
+            <section class="card-section">
+                <div class="section-head">
+                    <h2 class="section-title">LOG DRINK</h2>
+                    <button id="undoBtn" class="undo-btn" title="Undo last drink">↩ Undo</button>
+                </div>
+
+                <div class="drinks-grid">
+                    <button class="drink-btn" data-amount="250">
+                        <span class="drink-emoji">🥛</span>
+                        <span class="drink-vol">+250 ml</span>
+                        <span class="drink-name">Pre-Workout</span>
+                    </button>
+
+                    <button class="drink-btn" data-amount="500">
+                        <span class="drink-emoji">💧</span>
+                        <span class="drink-vol">+500 ml</span>
+                        <span class="drink-name">Water Bottle</span>
+                    </button>
+
+                    <button class="drink-btn" data-amount="700">
+                        <span class="drink-emoji">⚡</span>
+                        <span class="drink-vol">+700 ml</span>
+                        <span class="drink-name">Shaker Bottle</span>
+                    </button>
+
+                    <button class="drink-btn" data-amount="1000">
+                        <span class="drink-emoji">🏋️</span>
+                        <span class="drink-vol">+1000 ml</span>
+                        <span class="drink-name">1L Gallon Jug</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Past Days / Monthly History -->
+            <section class="card-section">
+                <h2 class="section-title">HISTORY (PAST DAYS)</h2>
+                <div class="history-list" id="historyList">
+                    <!-- JavaScript will show past days here -->
+                    <p class="empty-history">Your daily history will show here!</p>
+                </div>
+            </section>
+
+        </main>
+
+
+       
+    </div>
+
+    <!-- Connects our JavaScript file -->
+    <script src="app.js"></script>
+</body>
+
+</html>
