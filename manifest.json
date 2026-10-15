@@ -9,7 +9,11 @@
   "orientation": "portrait",
   "background_color": "#0a0e17",
   "theme_color": "#0a0e17",
-  "categories": ["health", "fitness", "lifestyle"],
+  "categories": [
+    "health",
+    "fitness",
+    "lifestyle"
+  ],
   "lang": "en",
   "dir": "ltr",
   "icons": [
@@ -39,4 +43,3 @@
     }
   ]
 }
- 
