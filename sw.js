@@ -1,53 +1,54 @@
-// AQUADIVI Offline-First Service Worker
-const CACHE_NAME = 'aquadivi-gym-v1';
-const ASSETS_TO_CACHE = [
-  './',
-  './index.html',
-  './style.css',
-  './app.js',
-  './icon.svg',
-  './manifest.json'
-];
+// This is the service worker with the combined offline experience (Offline page + Offline copy of pages)
 
-// 1. Install Event: Saves all gym assets to phone storage
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log('⚡ Caching gym water tracker assets for offline use...');
-      return cache.addAll(ASSETS_TO_CACHE);
-    })
-  );
-  self.skipWaiting();
+const CACHE = "pwabuilder-offline-page";
+
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
+
+// TODO: replace the following with the correct offline fallback page i.e.: const offlineFallbackPage = "offline.html";
+const offlineFallbackPage = "index.html";
+
+self.addEventListener("message", (event) => {
+  if (event.data && event.data.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
 });
 
-// 2. Activate Event: Cleans up old versions when you update code
-self.addEventListener('activate', (event) => {
+self.addEventListener('install', async (event) => {
   event.waitUntil(
-    caches.keys().then((keys) => {
-      return Promise.all(
-        keys.map((key) => {
-          if (key !== CACHE_NAME) {
-            console.log('🧹 Removing old cache:', key);
-            return caches.delete(key);
-          }
-        })
-      );
-    })
+    caches.open(CACHE)
+      .then((cache) => cache.add(offlineFallbackPage))
   );
-  self.clients.claim();
 });
 
-// 3. Fetch Event: Serves files from cache instantly even without internet
+if (workbox.navigationPreload.isSupported()) {
+  workbox.navigationPreload.enable();
+}
+
+workbox.routing.registerRoute(
+  new RegExp('/*'),
+  new workbox.strategies.StaleWhileRevalidate({
+    cacheName: CACHE
+  })
+);
+
 self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      // Return cached file if found, otherwise try network
-      return cachedResponse || fetch(event.request).catch(() => {
-        // Fallback for navigation
-        if (event.request.mode === 'navigate') {
-          return caches.match('./index.html');
+  if (event.request.mode === 'navigate') {
+    event.respondWith((async () => {
+      try {
+        const preloadResp = await event.preloadResponse;
+
+        if (preloadResp) {
+          return preloadResp;
         }
-      });
-    })
-  );
+
+        const networkResp = await fetch(event.request);
+        return networkResp;
+      } catch (error) {
+
+        const cache = await caches.open(CACHE);
+        const cachedResp = await cache.match(offlineFallbackPage);
+        return cachedResp;
+      }
+    })());
+  }
 });
