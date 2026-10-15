@@ -8,7 +8,7 @@
     <!-- Crucial mobile tag: prevents zooming out and makes it fit phone screens -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>AQUADIVI â€¢ Gym Water Tracker</title>
+    <title>AQUADIVI • Gym Water Tracker</title>
     <link rel="icon" type="image/svg+xml" href="icon.svg">
     <link rel="manifest" href="manifest.json">
 
@@ -24,15 +24,47 @@
         <!-- Top Header -->
         <header class="app-header">
             <div class="brand">
-                <span class="brand-badge">âš¡</span>
+                <span class="brand-badge" >💧</span>
                 <div>
                     <h1 class="brand-title">AQUADIVI</h1>
                     <p class="brand-subtitle">Gym Hydration Tracker</p>
+                    <div id="user-chip" class="user-chip hidden">
+    <span id="user-name">⚡ Gym Rat</span>
+    <button id="logout-btn" class="logout-btn">Logout</button>
+</div>
+
                 </div>
             </div>
         </header>
+                
+
+                <!-- SCREEN 1: LOGIN / WELCOME SCREEN -->
+        <section id="login-screen" class="screen-card login-screen">
+            <div class="login-hero">
+                <div class="login-badge">💧</div>
+                <h2 class="login-title">Lock In Your Hydration</h2>
+                <p class="login-desc">Track every milliliter. Never lose your gym water streak.</p>
+            </div>
+
+            <button id="google-login-btn" class="btn-google-auth">
+                <svg width="18" height="18" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                </svg>
+                Continue with Google
+            </button>
+
+            <button id="guest-btn" class="btn-guest-auth">
+                Continue as Guest (Offline)
+            </button>
+        </section>
+
+
                 <!-- Main Screen -->
-        <main class="main-content">
+        <main id="dashboard-screen" class="main-content hidden">
+
 
             <!-- Hero Water Gauge Card -->
             <section class="gauge-card">
@@ -122,7 +154,32 @@
     </div>
 
     <!-- Connects our JavaScript file -->
-    <script src="app.js"></script>
+    <!-- FIREBASE SDKS -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  // Your Firebase Config
+  const firebaseConfig = {
+    apiKey: "AIzaSyCwgJSAue2wgf3eeUeqQ9RhgLuzjxqkGDU",
+    authDomain: "ali-n8n-access.firebaseapp.com",
+    projectId: "ali-n8n-access",
+    storageBucket: "ali-n8n-access.firebasestorage.app",
+    messagingSenderId: "578593559850",
+    appId: "1:578593559850:web:0e0790d9254f0b125afa53"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  window.auth = getAuth(app);
+  window.googleProvider = new GoogleAuthProvider();
+  window.db = getFirestore(app);
+  window.fbOps = { signInWithPopup, signOut, onAuthStateChanged, doc, setDoc, getDoc };
+</script>
+
+<script src="app.js"></script>
+
 </body>
 
 </html>

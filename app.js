@@ -46,6 +46,8 @@ function loadFromStorage() {
 // 4. SAVE TO PHONE STORAGE
 function saveToStorage() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+  syncWithCloud(); // ☁️ Sends update to Google Firebase if logged in!
+
 }
 
 // 5. DOM ELEMENTS (Connecting to HTML IDs)
@@ -163,3 +165,115 @@ targetPills.forEach(pill => {
 // START THE APP!
 loadFromStorage();
 renderUI();
+/* ==========================================================================
+   FIREBASE AUTHENTICATION & SCREEN SWITCHER
+   ========================================================================== */
+
+let currentUser = null;
+
+// Grab Screen & Auth Elements
+const loginScreen = document.getElementById('login-screen');
+const dashboardScreen = document.getElementById('dashboard-screen');
+const googleLoginBtn = document.getElementById('google-login-btn');
+const guestBtn = document.getElementById('guest-btn');
+const userChip = document.getElementById('user-chip');
+const userNameEl = document.getElementById('user-name');
+const logoutBtn = document.getElementById('logout-btn');
+
+// Helper to switch screens
+function showDashboard(name) {
+    if (loginScreen) loginScreen.classList.add('hidden');
+    if (dashboardScreen) dashboardScreen.classList.remove('hidden');
+    if (userChip) {
+        userChip.classList.remove('hidden');
+        userNameEl.textContent = `⚡ ${name}`;
+    }
+}
+
+function showLoginScreen() {
+    if (loginScreen) loginScreen.classList.remove('hidden');
+    if (dashboardScreen) dashboardScreen.classList.add('hidden');
+    if (userChip) userChip.classList.add('hidden');
+}
+
+// 1. Google Login Button Click
+if (googleLoginBtn) {
+    googleLoginBtn.addEventListener('click', async () => {
+        if (!window.auth || !window.fbOps) {
+            alert("Firebase is still connecting. Please try again in 2 seconds!");
+            return;
+        }
+        try {
+            const result = await window.fbOps.signInWithPopup(window.auth, window.googleProvider);
+            currentUser = result.user;
+            showDashboard(currentUser.displayName ? currentUser.displayName.split(' ')[0] : 'Gym Rat');
+            syncWithCloud();
+        } catch (error) {
+            console.error("Login failed:", error);
+            alert("Login failed: " + error.message);
+        }
+    });
+}
+
+// 2. Offline / Guest Button Click
+if (guestBtn) {
+    guestBtn.addEventListener('click', () => {
+        currentUser = null;
+        showDashboard('Guest Rat');
+    });
+}
+
+// 3. Logout Button Click
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', async () => {
+        if (window.auth && window.fbOps) {
+            await window.fbOps.signOut(window.auth);
+        }
+        currentUser = null;
+        showLoginScreen();
+    });
+}
+
+// 4. Auto-detect if user was already logged in
+function checkAuthState() {
+    if (window.auth && window.fbOps) {
+        window.fbOps.onAuthStateChanged(window.auth, (user) => {
+            if (user) {
+                currentUser = user;
+                const firstName = user.displayName ? user.displayName.split(' ')[0] : 'Gym Rat';
+                showDashboard(firstName);
+                syncWithCloud();
+            } else {
+                showLoginScreen();
+            }
+        });
+    } else {
+        // If Firebase hasn't loaded yet, retry in 200ms
+        setTimeout(checkAuthState, 200);
+    }
+}
+
+// 5. Cloud Sync: Saves your water liters to Google Firestore!
+async function syncWithCloud() {
+    if (!currentUser || !window.db || !window.fbOps) return;
+    try {
+        const todayKey = new Date().toISOString().split('T')[0];
+        const userDocRef = window.fbOps.doc(window.db, "users", currentUser.uid, "daily_logs", todayKey);
+        
+        // Save current water and target to cloud
+        await window.fbOps.setDoc(userDocRef, {
+            email: currentUser.email,
+            name: currentUser.displayName,
+           currentMl: appData.currentMl,
+           targetMl: appData.targetMl,
+            updatedAt: new Date().toISOString()
+        }, { merge: true });
+        
+        console.log("☁️ Water data synced to Google Cloud!");
+    } catch (err) {
+        console.error("Cloud sync error:", err);
+    }
+}
+
+// Start checking login status when page loads
+checkAuthState();

@@ -421,3 +421,131 @@ body {
     font-size: 2.2rem;
   }
 }
+/* ==========================================================================
+   SCREEN 1: LOGIN / WELCOME SCREEN (ELECTRIC VOLT THEME)
+   ========================================================================== */
+.login-screen {
+    background: linear-gradient(180deg, rgba(20, 27, 45, 0.9) 0%, rgba(10, 14, 23, 0.95) 100%);
+    border: 1px solid rgba(204, 255, 0, 0.2);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(204, 255, 0, 0.08);
+    border-radius: 24px;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    backdrop-filter: blur(12px);
+    animation: fadeIn 0.3s ease;
+}
+
+.login-badge {
+    font-size: 3rem;
+    width: 72px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(204, 255, 0, 0.1);
+    border: 1px solid rgba(204, 255, 0, 0.3);
+    border-radius: 50%;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 0 25px rgba(204, 255, 0, 0.2);
+}
+
+.login-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+    margin-bottom: 0.35rem;
+}
+
+.login-desc {
+    font-size: 0.9rem;
+    color: #94a3b8;
+    line-height: 1.4;
+    max-width: 280px;
+}
+
+/* Big Google Button */
+.btn-google-auth {
+    width: 100%;
+    max-width: 300px;
+    background: #ffffff;
+    color: #121212;
+    border: none;
+    border-radius: 999px;
+    padding: 0.85rem 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+    transition: transform 0.15s ease, background 0.2s ease;
+}
+
+.btn-google-auth:active {
+    transform: scale(0.97);
+}
+
+/* Offline Guest Button */
+.btn-guest-auth {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #94a3b8;
+    border-radius: 999px;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-guest-auth:hover {
+    color: var(--color-volt, #ccff00);
+    border-color: rgba(204, 255, 0, 0.4);
+}
+
+/* Header User Chip (Shows when logged in) */
+.user-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(204, 255, 0, 0.08); /* Subtle volt tint */
+    border: 1px solid rgba(204, 255, 0, 0.25);
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    margin-top: 0.4rem;
+}
+
+#user-name {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-volt, #ccff00);
+}
+
+.logout-btn {
+    background: transparent;
+    border: none;
+    color: #ff6b6b;
+    font-size: 0.7rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+}
+
+/* Global utility */
+.hidden {
+    display: none !important;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
