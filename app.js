@@ -182,18 +182,18 @@ const logoutBtn = document.getElementById('logout-btn');
 
 // Helper to switch screens
 function showDashboard(name) {
-    if (loginScreen) loginScreen.classList.add('hidden');
-    if (dashboardScreen) dashboardScreen.classList.remove('hidden');
+    if (loginScreen) loginScreen.style.display = 'none';
+    if (dashboardScreen) dashboardScreen.style.display = 'block';
     if (userChip) {
-        userChip.classList.remove('hidden');
+        userChip.style.display = 'inline-flex';
         userNameEl.textContent = `⚡ ${name}`;
     }
 }
 
 function showLoginScreen() {
-    if (loginScreen) loginScreen.classList.remove('hidden');
-    if (dashboardScreen) dashboardScreen.classList.add('hidden');
-    if (userChip) userChip.classList.add('hidden');
+    if (loginScreen) loginScreen.style.display = 'flex';
+    if (dashboardScreen) dashboardScreen.style.display = 'none';
+    if (userChip) userChip.style.display = 'none';
 }
 
 // 1. Google Login Button Click
