@@ -1,15 +1,17 @@
 ﻿{
-  "name": "AquaDivi - Gym Water Tracker",
-  "short_name": "AquaDivi",
+  "name": "AQUADIVI Gym Water Tracker",
+  "short_name": "AQUADIVI",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0a0e17",
   "theme_color": "#0a0e17",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml"
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
     }
   ]
 }
