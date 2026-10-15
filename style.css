@@ -512,38 +512,53 @@ body {
 }
 
 /* Header User Chip (Shows when logged in) */
+/* Clean Screen Visibility */
+.hidden {
+    display: none !important;
+}
+
+/* Header User Profile Badge */
 .user-chip {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    background: rgba(204, 255, 0, 0.08); /* Subtle volt tint */
-    border: 1px solid rgba(204, 255, 0, 0.25);
-    padding: 0.25rem 0.75rem;
+    gap: 0.6rem;
+    background: rgba(204, 255, 0, 0.1);
+    border: 1px solid rgba(204, 255, 0, 0.3);
+    padding: 0.35rem 0.85rem;
     border-radius: 999px;
-    margin-top: 0.4rem;
+    margin-top: 0.5rem;
 }
 
 #user-name {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     font-weight: 700;
     color: var(--color-volt, #ccff00);
 }
 
 .logout-btn {
-    background: transparent;
-    border: none;
+    background: rgba(255, 75, 75, 0.2);
+    border: 1px solid rgba(255, 75, 75, 0.4);
     color: #ff6b6b;
-    font-size: 0.7rem;
-    font-weight: 600;
+    font-size: 0.72rem;
+    font-weight: 700;
     cursor: pointer;
-    padding: 0;
-    text-decoration: underline;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    transition: background 0.2s ease;
+}
+
+.logout-btn:hover {
+    background: rgba(255, 75, 75, 0.4);
+}
+
+/* Gym Drink Grid Icons Display */
+.drink-icon {
+    font-size: 1.8rem;
+    margin-bottom: 0.25rem;
+    display: block;
 }
 
 /* Global utility */
-.hidden {
-    display: none !important;
-}
 
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(8px); }
