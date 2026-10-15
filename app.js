@@ -274,15 +274,15 @@ function checkAuthState() {
 async function syncWithCloud() {
     if (!currentUser || !window.db || !window.fbOps) return;
     try {
-        const todayKey = new Date().toISOString().split('T')[0];
+        const todayKey = appData.todayDate;
         const userDocRef = window.fbOps.doc(window.db, "users", currentUser.uid, "daily_logs", todayKey);
         
         // Save current water and target to cloud
         await window.fbOps.setDoc(userDocRef, {
             email: currentUser.email,
             name: currentUser.displayName,
-           currentMl: appData.currentMl,
-           targetMl: appData.targetMl,
+           currentMl: appData.todayWater,
+           targetMl: appData.dailyGoal,
             updatedAt: new Date().toISOString()
         }, { merge: true });
         

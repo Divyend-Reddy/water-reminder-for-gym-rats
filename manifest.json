@@ -1,9 +1,9 @@
 ﻿{
-  "id": "/water-reminder-for-gym-rats/",
+  "id": "./",
   "name": "AQUADIVI Gym Water Tracker",
   "short_name": "AQUADIVI",
   "description": "Gym hydration tracker designed for athletes and gym rats.",
-  "start_url": "./index.html",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
@@ -39,3 +39,4 @@
     }
   ]
 }
+ 

@@ -187,6 +187,25 @@
 </script>
 
 <script src="app.js"></script>
+<script>
+    if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+            navigator.serviceWorker.register("./sw.js").catch((error) => {
+                console.error("Service worker registration failed:", error);
+            });
+        });
+    }
+</script>
+    <!-- Register Offline Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(() => console.log('⚡ Offline Service Worker Registered!'))
+                    .catch(err => console.error('SW Error:', err));
+            });
+        }
+    </script>
 
 </body>
 
