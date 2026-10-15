@@ -12,7 +12,7 @@
   "categories": ["health", "fitness", "lifestyle"],
   "lang": "en",
   "dir": "ltr",
-   "icons": [
+  "icons": [
     {
       "src": "icon-192.png",
       "sizes": "192x192",
@@ -32,3 +32,4 @@
       "purpose": "maskable"
     }
   ]
+}
