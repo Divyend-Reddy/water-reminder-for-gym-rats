@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -9,6 +9,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <title>AQUADIVI • Gym Water Tracker</title>
+    <meta name="theme-color" content="#0a0e17">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="AQUADIVI">
+    <link rel="apple-touch-icon" href="icon-192.png">
     <link rel="icon" type="image/svg+xml" href="icon.svg">
     <link rel="manifest" href="manifest.json">
 
@@ -116,7 +121,7 @@
             <section class="card-section">
                 <div class="section-head">
                     <h2 class="section-title">LOG DRINK</h2>
-                    <button id="undoBtn" class="undo-btn" title="Undo last drink">â†© Undo</button>
+                    <button id="undoBtn" class="undo-btn" title="Undo last drink">↩ Undo</button>
                 </div>
 
                 <div class="drinks-grid">
@@ -190,23 +195,12 @@
 <script>
     if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {
-            navigator.serviceWorker.register("./sw.js").catch((error) => {
-                console.error("Service worker registration failed:", error);
-            });
+            navigator.serviceWorker.register("./sw.js")
+                .then(() => console.log("⚡ Offline Service Worker Registered!"))
+                .catch((error) => console.error("SW Error:", error));
         });
     }
 </script>
-    <!-- Register Offline Service Worker -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(() => console.log('⚡ Offline Service Worker Registered!'))
-                    .catch(err => console.error('SW Error:', err));
-            });
-        }
-    </script>
-
 </body>
 
 </html>

@@ -224,7 +224,7 @@ if (googleLoginBtn) {
             const result = await window.fbOps.signInWithPopup(window.auth, window.googleProvider);
             currentUser = result.user;
             showDashboard(currentUser.displayName ? currentUser.displayName.split(' ')[0] : 'Gym Rat');
-            syncWithCloud();
+            await loadFromCloud();
         } catch (error) {
             console.error("Login failed:", error);
             alert("Login failed: " + error.message);
@@ -254,12 +254,12 @@ if (logoutBtn) {
 // 4. Auto-detect if user was already logged in
 function checkAuthState() {
     if (window.auth && window.fbOps) {
-        window.fbOps.onAuthStateChanged(window.auth, (user) => {
+        window.fbOps.onAuthStateChanged(window.auth, async (user) => {
             if (user) {
                 currentUser = user;
                 const firstName = user.displayName ? user.displayName.split(' ')[0] : 'Gym Rat';
                 showDashboard(firstName);
-                syncWithCloud();
+                await loadFromCloud();
             } else {
                 showLoginScreen();
             }
@@ -281,8 +281,8 @@ async function syncWithCloud() {
         await window.fbOps.setDoc(userDocRef, {
             email: currentUser.email,
             name: currentUser.displayName,
-           currentMl: appData.todayWater,
-           targetMl: appData.dailyGoal,
+            currentMl: appData.todayWater,
+            targetMl: appData.dailyGoal,
             updatedAt: new Date().toISOString()
         }, { merge: true });
         
@@ -291,6 +291,58 @@ async function syncWithCloud() {
         console.error("Cloud sync error:", err);
     }
 }
+
+// 6. Cloud Fetch: Restores progress from Firestore when opening on a new device/phone
+async function loadFromCloud() {
+    if (!currentUser || !window.db || !window.fbOps) return;
+    try {
+        const todayKey = appData.todayDate;
+        const userDocRef = window.fbOps.doc(window.db, "users", currentUser.uid, "daily_logs", todayKey);
+        const docSnap = await window.fbOps.getDoc(userDocRef);
+
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            let changed = false;
+
+            // Don't overwrite local progress with 0 if local is ahead, but adopt cloud if cloud is ahead
+            if (typeof data.currentMl === "number") {
+                if (data.currentMl > appData.todayWater) {
+                    appData.todayWater = data.currentMl;
+                    changed = true;
+                } else if (appData.todayWater > data.currentMl) {
+                    // Local phone has higher value, update cloud
+                    await syncWithCloud();
+                }
+            }
+
+            if (typeof data.targetMl === "number" && data.targetMl !== appData.dailyGoal) {
+                appData.dailyGoal = data.targetMl;
+                changed = true;
+            }
+
+            if (changed) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+                renderUI();
+            }
+        } else {
+            // First time logging in today on any device, push local state
+            await syncWithCloud();
+        }
+    } catch (err) {
+        console.error("Cloud load error:", err);
+    }
+}
+
+// Check midnight rollover when user resumes app on mobile
+document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+        loadFromStorage();
+        renderUI();
+        if (currentUser) {
+            loadFromCloud();
+        }
+    }
+});
 
 // Start checking login status when page loads
 checkAuthState();
